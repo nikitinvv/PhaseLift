@@ -63,7 +63,7 @@ for w=[noise_min:noise_step:noise_max]
         X_k0=X0;
         r=0;
         
-        while (r<20000 && norm(X_k0-X_k1temp)>1e-10)
+        while (r<300 && norm(X_k0-X_k1temp)>1e-10)
             
             grad1=0;
             r=r+1;
@@ -107,13 +107,14 @@ for w=[noise_min:noise_step:noise_max]
             %             end
             
             
-            if ismember(r,[200:200:20000])
+            %if ismember(r,[200:200:20000])
+             if (mod(r,200)==0)   
                 [x_k1,ek1] = eigs(X_k1temp,1);
                 fun1=@(c)minERROR(c,x_0,x_k1);
                 phase1=fsolve(fun1,[0;0;1],opts);
                 B=norm(x_I)*reshape(x_k1/(phase1(1)+1i*phase1(2)),[N,N]);
-                figure
-                imshow(B,'InitialMagnification',1000)
+%                 figure
+%                 imshow(B,'InitialMagnification',1000)
                 
                 
                 norm(B-x_0M)
@@ -143,11 +144,11 @@ for w=[noise_min:noise_step:noise_max]
         
         
         A=reshape(x_k1/(phase1(1)+1i*phase1(2)),[N,N]);
-        figure(1)
-        imshow(norm(x_I)*A)
-        figure(2)
-        imshow(x_0M)
-        norm(norm(x_I)*A-x_0M)
+%         figure(1)
+%         imshow(norm(x_I)*A)
+%         figure(2)
+%         imshow(x_0M)
+%         norm(norm(x_I)*A-x_0M)
         
         
         %vrank_stat1=[rank_stat1,rank(X_k1,1e-3)]
